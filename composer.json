@@ -1,0 +1,24 @@
+{
+    "name": "uni-deal/laravel-hookable",
+    "description": "Add hooks system to Laravel",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "UniDeal\\LaravelHookable\\": "."
+        }
+    },
+    "require": {
+        "illuminate/support": "^10.0|^11.0",
+        "illuminate/contracts": "^10.0|^11.0",
+        "illuminate/console": "^10.0|^11.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "UniDeal\\LaravelHookable\\Providers\\ServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
