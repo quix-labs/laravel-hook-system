@@ -28,12 +28,9 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
     private function _registerHookManager(): void
     {
-        $this->app->singleton(HookManagerContract::class, function (Application $app) {
+        $this->app->singleton('hooks_manager', function (Application $app) {
             return new HookManager();
         });
-
-        $hookManager = $this->app->make(HookManagerContract::class);
-        $this->app->instance('hooks_manager', $hookManager);
     }
 
     private function _registerHooks(): void

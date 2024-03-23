@@ -3,7 +3,7 @@
 namespace UniDeal\LaravelHookable\Console\Commands;
 
 use Illuminate\Console\Command;
-use UniDeal\LaravelHookable\Contracts\HookManager;
+use UniDeal\LaravelHookable\Facades\HookManager;
 use UniDeal\LaravelHookable\Hook;
 use UniDeal\LaravelHookable\Hooks\GetHooksTable;
 use UniDeal\LaravelHookable\Utils\CommandTable;
@@ -13,14 +13,14 @@ class HooksStatusCommand extends Command
     protected $signature = 'hooks:status';
     protected $description = 'List UniDeal\LaravelHookable hooks';
 
-    public function handle(HookManager $hookManager): int
+    public function handle(): int
     {
-        if ($hookManager->isCached()) {
+        if (HookManager::isCached()) {
             $this->components->warn("Hooks are actually cached!");
         }
 
-        $hooks = collect($hookManager->getHooks())
-            ->mapWithKeys(fn(string|Hook $hook) => [$hook => $hookManager->getInterceptorsForHook($hook)]);
+        $hooks = collect(HookManager::getHooks())
+            ->mapWithKeys(fn(string|Hook $hook) => [$hook => HookManager::getInterceptorsForHook($hook)]);
         if (count($hooks) > 0) {
             $this->showHooks($hooks->toArray());
         } else {

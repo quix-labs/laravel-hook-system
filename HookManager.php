@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\File;
 use UniDeal\LaravelHookable\Enums\ActionWhenMissing;
 use UniDeal\LaravelHookable\Utils\Intercept;
 
-class HookManager implements Contracts\HookManager
+class HookManager
 {
     /**
      * @var array<class-string<Hook>,array<int,array<callable>>>

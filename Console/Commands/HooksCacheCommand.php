@@ -3,18 +3,18 @@
 namespace UniDeal\LaravelHookable\Console\Commands;
 
 use Illuminate\Console\Command;
-use UniDeal\LaravelHookable\Contracts\HookManager;
+use UniDeal\LaravelHookable\Facades\HookManager;
 
 class HooksCacheCommand extends Command
 {
     protected $signature = 'hooks:cache';
     protected $description = 'Cache UniDeal\LaravelHookable hooks';
 
-    public function handle(HookManager $hookManager): int
+    public function handle(): int
     {
 
-        $hookManager->createCache();
-        if ($hookManager->isCached()) {
+        HookManager::createCache();
+        if (HookManager::isCached()) {
             $this->components->info('Hooks cached successfully.');
         }
 
