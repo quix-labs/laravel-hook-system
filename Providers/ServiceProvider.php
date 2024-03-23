@@ -2,6 +2,7 @@
 
 namespace UniDeal\LaravelHookable\Providers;
 
+use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Console\AboutCommand;
 use UniDeal\LaravelHookable\Console\Commands\HooksCacheCommand;
@@ -9,10 +10,9 @@ use UniDeal\LaravelHookable\Console\Commands\HooksClearCommand;
 use UniDeal\LaravelHookable\Console\Commands\HooksStatusCommand;
 use UniDeal\LaravelHookable\Facades\HookManager as HookManagerFacade;
 use UniDeal\LaravelHookable\HookManager;
-use UniDeal\LaravelHookable\Contracts\HookManager as HookManagerContract;
 use UniDeal\LaravelHookable\Hooks\GetHooksTable;
 
-class ServiceProvider extends \Illuminate\Support\ServiceProvider
+class ServiceProvider extends \Illuminate\Support\ServiceProvider implements DeferrableProvider
 {
     public function register(): void
     {
@@ -63,4 +63,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         }
     }
 
+    public function provides(): array
+    {
+        return ['hooks_manager'];
+    }
 }
