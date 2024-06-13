@@ -71,11 +71,3 @@ jobs:
         with:
           name: coverage-report
           path: build/coverage
-
-      - name: Display test results
-        uses: dorny/test-reporter@v1
-        with:
-          name: PHPUnit tests
-          path: build/report.junit.xml
-          reporter: junit
-          fail-on-error: false
