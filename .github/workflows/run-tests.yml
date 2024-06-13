@@ -72,9 +72,8 @@ jobs:
           name: coverage-report-${{ matrix.os }}-${{ matrix.php }}-${{ matrix.laravel }}
           path: build/coverage
 
-      - name: Annotate test results
-        uses: scacap/action-surefire-report@v1
+      - name: Publish test results
+        uses: mikepenz/junit-report-action@v3
         if: always()
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          report_paths: build/report.junit.xml
+          report_paths: build/logs/junit.xml
