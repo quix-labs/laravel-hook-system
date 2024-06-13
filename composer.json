@@ -57,7 +57,7 @@
       "@php vendor/bin/testbench serve"
     ],
     "analyse": "vendor/bin/phpstan analyse --memory-limit=1G",
-    "test": "vendor/bin/pest",
+    "test": "vendor/bin/pest --parallel",
     "test-coverage": "XDEBUG_MODE=coverage vendor/bin/pest --coverage",
     "format": "vendor/bin/pint"
   },

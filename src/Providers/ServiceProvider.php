@@ -12,7 +12,7 @@ use QuixLabs\LaravelHookSystem\Facades\HookManager as HookManagerFacade;
 use QuixLabs\LaravelHookSystem\HookManager;
 use QuixLabs\LaravelHookSystem\Hooks\GetHooksTable;
 
-class ServiceProvider extends \Illuminate\Support\ServiceProvider implements DeferrableProvider
+class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
     public function register(): void
     {
@@ -35,7 +35,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider implements Def
 
     private function _registerHooks(): void
     {
-        if (! HookManagerFacade::isCached()) {
+        if (!HookManagerFacade::isCached()) {
             HookManagerFacade::registerHook(GetHooksTable::class);
         }
     }
@@ -53,18 +53,14 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider implements Def
 
     private function _appendInformationToAboutCommand(): void
     {
-        if (! $this->app->runningInConsole()) {
+        if (!$this->app->runningInConsole()) {
             return;
         }
-        if (HookManagerFacade::isCached()) {
-            AboutCommand::add('Cache', 'Hooks', '<fg=green;options=bold>CACHED</>');
-        } else {
-            AboutCommand::add('Cache', 'Hooks', '<fg=yellow;options=bold>NOT CACHED</>');
-        }
-    }
-
-    public function provides(): array
-    {
-        return ['hooks_manager'];
+        AboutCommand::add('Cache', fn() => [
+            'Hooks' =>
+                HookManagerFacade::isCached()
+                    ? '<fg=green;options=bold>CACHED</>'
+                    : '<fg=yellow;options=bold>NOT CACHED</>'
+        ]);
     }
 }
