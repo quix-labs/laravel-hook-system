@@ -4,12 +4,11 @@ namespace QuixLabs\LaravelHookSystem\Utils;
 
 use Illuminate\Support\Facades\Blade;
 use QuixLabs\LaravelHookSystem\Hook;
-use function Termwind\render;
 
+use function Termwind\render;
 
 class CommandTable
 {
-
     public function __construct(public array &$rows, public string|Hook|null $hook = null)
     {
     }
@@ -21,7 +20,7 @@ class CommandTable
         }
 
         render(Blade::render(
-            string: file_get_contents(__DIR__ . '/design/command_table.blade.php'),
+            string: file_get_contents(__DIR__.'/design/command_table.blade.php'),
             data: ['rows' => $this->rows],
             deleteCachedView: true,
         ));

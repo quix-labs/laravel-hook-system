@@ -10,7 +10,6 @@ it('Can register hook', function () {
     HookManager::registerHook(GetString::class);
 })->throwsNoExceptions();
 
-
 // Interceptor ActionWhenMissing testing
 test('Interceptor skipped when missing and ActionWhenMissing::SKIP', function () {
     HookManager::registerInterceptor(SkipNonExistingHook::class);
