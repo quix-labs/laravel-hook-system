@@ -3,32 +3,29 @@
 namespace QuixLabs\LaravelHookSystem\Utils;
 
 use Illuminate\Support\Facades\Blade;
+use phpDocumentor\Reflection\Types\ClassString;
 use QuixLabs\LaravelHookSystem\Hook;
 
+use Termwind\HtmlRenderer;
 use function Termwind\render;
 
 class CommandTable
 {
-    public function __construct(public array &$rows, public string|Hook|null $hook = null)
+    /**
+     * @param array $rows
+     * @param class-string<Hook>|null $hook
+     * @return string
+     */
+    public static function asString(array &$rows, ?string $hook = null): string
     {
-    }
-
-    public function render(): void
-    {
-        if ($this->hook) {
-            $this->hook::send($this->rows);
+        if ($hook) {
+            $hook::send($rows);
         }
-
-        render(Blade::render(
-            string: file_get_contents(__DIR__.'/design/command_table.blade.php'),
-            data: ['rows' => $this->rows],
+        $html = Blade::render(
+            string: file_get_contents(__DIR__ . '/design/command_table.blade.php'),
+            data: compact('rows'),
             deleteCachedView: true,
-        ));
-    }
-
-    public static function display(array &$rows, ?string $hook = null): void
-    {
-        $table = new self($rows, $hook);
-        $table->render();
+        );
+        return (new HtmlRenderer)->parse($html)->toString();
     }
 }
