@@ -57,8 +57,8 @@
       "@php vendor/bin/testbench serve"
     ],
     "analyse": "vendor/bin/phpstan analyse --memory-limit=1G",
-    "test": "vendor/bin/pest --parallel",
-    "test-coverage": "XDEBUG_MODE=coverage vendor/bin/pest --coverage",
+    "test": "cp .env.test vendor/orchestra/testbench-core/laravel/.env && vendor/bin/pest",
+    "test-coverage": "cp .env.test vendor/orchestra/testbench-core/laravel/.env && XDEBUG_MODE=coverage vendor/bin/pest --coverage",
     "format": "vendor/bin/pint"
   },
   "config": {
