@@ -21,7 +21,7 @@ class HooksStatusCommand extends Command
         }
 
         $hooks = collect(HookManager::getHooks())
-            ->mapWithKeys(fn(string|Hook $hook) => [$hook => HookManager::getInterceptorsForHook($hook)]);
+            ->mapWithKeys(fn (string|Hook $hook) => [$hook => HookManager::getInterceptorsForHook($hook)]);
         if (count($hooks) > 0) {
             $this->showHooks($hooks->toArray());
         } else {
@@ -32,24 +32,24 @@ class HooksStatusCommand extends Command
     }
 
     /**
-     * @param array<string,array<int,array<callable>>> $hooks
+     * @param  array<string,array<int,array<callable>>>  $hooks
      */
     private function showHooks(array $hooks): void
     {
         $rows = collect($hooks)->map(function (array $interceptors, string $hookClass) {
             $callables = collect($interceptors)
-                ->map(fn(array $callables, int $priority) => implode('<br/>', array_map(
-                        fn(callable $callable) => $this->_callableToString($callable), $callables)
+                ->map(fn (array $callables, int $priority) => implode('<br/>', array_map(
+                    fn (callable $callable) => $this->_callableToString($callable), $callables)
                 ))->join('<br/>');
 
             $priorities = collect($interceptors)
-                ->map(fn(array $callables, int $priority) => implode('<br/>', array_fill(0, count($callables), $priority)))
+                ->map(fn (array $callables, int $priority) => implode('<br/>', array_fill(0, count($callables), $priority)))
                 ->join('<br/>');
 
             return [
-                'Hook'         => $hookClass,
+                'Hook' => $hookClass,
                 'Interceptors' => $callables,
-                'Priority'     => $priorities,
+                'Priority' => $priorities,
             ];
         })->toArray();
 

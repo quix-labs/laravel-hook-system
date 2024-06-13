@@ -56,4 +56,4 @@ test('Cache are restored on boot if exists', function () {
 test('Throw error when cache file cannot be loaded', function () {
     file_put_contents(HookManager::getCacheFilepath(), '<?php return teer;');
     HookManager::loadCache();
-})->throws("Unable to load hooks cache");
+})->throws('Unable to load hooks cache');

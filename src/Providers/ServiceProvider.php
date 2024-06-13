@@ -2,7 +2,6 @@
 
 namespace QuixLabs\LaravelHookSystem\Providers;
 
-use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Console\AboutCommand;
 use QuixLabs\LaravelHookSystem\Console\Commands\HooksCacheCommand;
@@ -35,7 +34,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
     private function _registerHooks(): void
     {
-        if (!HookManagerFacade::isCached()) {
+        if (! HookManagerFacade::isCached()) {
             HookManagerFacade::registerHook(GetHooksTable::class);
         }
     }
@@ -53,14 +52,13 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
     private function _appendInformationToAboutCommand(): void
     {
-        if (!$this->app->runningInConsole()) {
+        if (! $this->app->runningInConsole()) {
             return;
         }
-        AboutCommand::add('Cache', fn() => [
-            'Hooks' =>
-                HookManagerFacade::isCached()
+        AboutCommand::add('Cache', fn () => [
+            'Hooks' => HookManagerFacade::isCached()
                     ? '<fg=green;options=bold>CACHED</>'
-                    : '<fg=yellow;options=bold>NOT CACHED</>'
+                    : '<fg=yellow;options=bold>NOT CACHED</>',
         ]);
     }
 }
