@@ -1,24 +1,80 @@
 {
-    "name": "uni-deal/laravel-hookable",
-    "description": "Add hooks system to Laravel",
-    "type": "library",
-    "autoload": {
-        "psr-4": {
-            "UniDeal\\LaravelHookable\\": "."
-        }
-    },
-    "require": {
-        "illuminate/support": "^10.0|^11.0",
-        "illuminate/contracts": "^10.0|^11.0",
-        "illuminate/console": "^10.0|^11.0"
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "UniDeal\\LaravelHookable\\Providers\\ServiceProvider"
-            ]
-        }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+  "name": "quix-labs/laravel-hook-system",
+  "description": "Add hooks system to Laravel",
+  "type": "library",
+  "license": "MIT",
+  "keywords": [
+    "laravel",
+    "hook",
+    "interceptor"
+  ],
+  "authors": [
+    {
+      "name": "COLANT Alan",
+      "email": "contact@alancolant.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "illuminate/support": "^10.0|^11.0",
+    "illuminate/contracts": "^10.0|^11.0",
+    "illuminate/console": "^10.0|^11.0"
+  },
+  "require-dev": {
+    "larastan/larastan": "^2.0.1",
+    "laravel/pint": "^1.0",
+    "nunomaduro/collision": "^7.8",
+    "orchestra/testbench": "^8.8",
+    "pestphp/pest": "^2.20",
+    "pestphp/pest-plugin-arch": "^2.0",
+    "pestphp/pest-plugin-laravel": "^2.0",
+    "phpstan/extension-installer": "^1.1",
+    "phpstan/phpstan-deprecation-rules": "^1.0",
+    "phpstan/phpstan-phpunit": "^1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "QuixLabs\\LaravelHookSystem\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "QuixLabs\\LaravelHookSystem\\Tests\\": "tests/",
+      "Workbench\\App\\": "workbench/app/"
+    }
+  },
+  "scripts": {
+    "post-autoload-dump": "@composer run prepare",
+    "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+    "prepare": "@php vendor/bin/testbench package:discover --ansi",
+    "build": [
+      "@composer run prepare",
+      "@php vendor/bin/testbench workbench:build --ansi"
+    ],
+    "start": [
+      "Composer\\Config::disableProcessTimeout",
+      "@composer run build",
+      "@php vendor/bin/testbench serve"
+    ],
+    "analyse": "vendor/bin/phpstan analyse --memory-limit=1G",
+    "test": "vendor/bin/pest",
+    "test-coverage": "XDEBUG_MODE=coverage vendor/bin/pest --coverage",
+    "format": "vendor/bin/pint"
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "pestphp/pest-plugin": true,
+      "phpstan/extension-installer": true
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "QuixLabs\\LaravelHookSystem\\Providers\\ServiceProvider"
+      ]
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }
