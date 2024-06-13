@@ -9,13 +9,12 @@ use QuixLabs\LaravelHookSystem\Hook;
 class Intercept
 {
     /**
-     * @param class-string<Hook> $hook
+     * @param  class-string<Hook>  $hook
      */
     public function __construct(
-        public string            $hook,
+        public string $hook,
         public ActionWhenMissing $actionWhenMissing = ActionWhenMissing::THROW_ERROR,
-        public int               $priority = 0
-    )
-    {
+        public int $priority = 0
+    ) {
     }
 }

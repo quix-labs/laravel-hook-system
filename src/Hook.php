@@ -19,6 +19,7 @@ abstract class Hook
                 $callable($instance);
             }
         }
+
         return $instance;
     }
 }

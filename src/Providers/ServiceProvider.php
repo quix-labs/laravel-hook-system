@@ -35,7 +35,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider implements Def
 
     private function _registerHooks(): void
     {
-        if (!HookManagerFacade::isCached()) {
+        if (! HookManagerFacade::isCached()) {
             HookManagerFacade::registerHook(GetHooksTable::class);
         }
     }
@@ -53,7 +53,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider implements Def
 
     private function _appendInformationToAboutCommand(): void
     {
-        if (!$this->app->runningInConsole()) {
+        if (! $this->app->runningInConsole()) {
             return;
         }
         if (HookManagerFacade::isCached()) {

@@ -41,19 +41,19 @@ class HookManager
                 $hook = $attributeInstance->hook;
                 $priority = $attributeInstance->priority;
 
-                if (!array_key_exists($attributeInstance->hook, $this->hooks)) {
+                if (! array_key_exists($attributeInstance->hook, $this->hooks)) {
                     switch ($attributeInstance->actionWhenMissing) {
                         case ActionWhenMissing::THROW_ERROR:
                             throw new \Exception("Hook {$hook} is not registered!");
                         case ActionWhenMissing::SKIP:
                             continue 2;
-                        case ActionWhenMissing::REGISTER_HOOK;
+                        case ActionWhenMissing::REGISTER_HOOK:
                             $this->registerHook($hook);
                     }
                 }
 
                 $callable = [$class, $method->getName()];
-                if (!is_callable($callable)) {
+                if (! is_callable($callable)) {
                     continue;
                 }
 
@@ -71,18 +71,19 @@ class HookManager
     }
 
     /**
-     * @param Hook|string $hook
      * @return array<int,callable[]>
+     *
      * @throws \Exception
      */
     public function getInterceptorsForHook(Hook|string $hook): array
     {
         $hookClass = is_string($hook) ? $hook : $hook::class;
-        if (!array_key_exists($hookClass, $this->hooks)) {
+        if (! array_key_exists($hookClass, $this->hooks)) {
             return [];
         }
         $hooks = $this->hooks[$hookClass];
         ksort($hooks);
+
         return $hooks;
     }
 
@@ -96,14 +97,14 @@ class HookManager
         try {
             $this->hooks = require $this->getCacheFilepath();
         } catch (\Throwable $e) {
-            throw new \RuntimeException("Unable to load hooks cache: " . $e->getMessage());
+            throw new \RuntimeException('Unable to load hooks cache: '.$e->getMessage());
         }
     }
 
     public function createCache(): void
     {
         $hooks = array_filter($this->hooks);
-        File::put($this->getCacheFilepath(), "<?php\nreturn " . var_export($hooks, true) . ";");
+        File::put($this->getCacheFilepath(), "<?php\nreturn ".var_export($hooks, true).';');
     }
 
     public function clearCache(): void
@@ -112,7 +113,6 @@ class HookManager
             File::delete($this->getCacheFilepath());
         }
     }
-
 
     public function isCached(): bool
     {
