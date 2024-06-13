@@ -58,4 +58,24 @@ jobs:
         run: composer show -D
 
       - name: Execute tests
-        run: vendor/bin/pest --ci
+        run: vendor/bin/pest --ci --coverage --log-junit build/report.junit.xml
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: build/report.junit.xml
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: build/coverage
+
+      - name: Display test results
+        uses: dorny/test-reporter@v1
+        with:
+          name: PHPUnit tests
+          path: build/report.junit.xml
+          reporter: junit
+          fail-on-error: false
