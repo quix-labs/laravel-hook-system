@@ -14,7 +14,7 @@ it('Can register hook', function () {
 it('Multiple hook registering ignore subsequent calls', function () {
     HookManager::registerHook(GetString::class);
     HookManager::registerHook(GetString::class);
-    expect(collect(HookManager::getHooks())->filter(fn($classname) => $classname === GetString::class))->toHaveCount(1);
+    expect(collect(HookManager::getHooks())->filter(fn ($classname) => $classname === GetString::class))->toHaveCount(1);
 });
 
 // Interceptor ActionWhenMissing testing
