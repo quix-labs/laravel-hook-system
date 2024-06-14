@@ -94,6 +94,6 @@ jobs:
       - name: Publish Test Results
         uses: mikepenz/action-junit-report@v4
         with:
-          report_paths: 'unit_test_reports/**.junit.xml'
+          report_paths: 'unit_test_reports/**/*.junit.xml'
           include_passed: true
           follow_symlink: true
