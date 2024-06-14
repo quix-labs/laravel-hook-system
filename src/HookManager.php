@@ -4,6 +4,7 @@ namespace QuixLabs\LaravelHookSystem;
 
 use Illuminate\Support\Facades\File;
 use QuixLabs\LaravelHookSystem\Enums\ActionWhenMissing;
+use QuixLabs\LaravelHookSystem\Interfaces\FullyCacheable;
 use QuixLabs\LaravelHookSystem\Utils\Intercept;
 
 class HookManager
@@ -14,6 +15,13 @@ class HookManager
     protected array $hooks = [];
 
     private bool $cached = false;
+
+    /**
+     * @var array<class-string<Hook>,Hook>
+     */
+    private array $fullCache = [];
+
+    private array $preventedFullCacheHooks = [];
 
     /**
      * @throws \Exception
@@ -43,8 +51,9 @@ class HookManager
                 $attributeInstance = $attribute->newInstance();
                 $hook = $attributeInstance->hook;
                 $priority = $attributeInstance->priority;
+                $preventFullCache = $attributeInstance->preventFullCache;
 
-                if (! array_key_exists($attributeInstance->hook, $this->hooks)) {
+                if (!array_key_exists($attributeInstance->hook, $this->hooks)) {
                     switch ($attributeInstance->actionWhenMissing) {
                         case ActionWhenMissing::THROW_ERROR:
                             throw new \Exception("Hook {$hook} is not registered!");
@@ -56,11 +65,14 @@ class HookManager
                 }
 
                 $callable = [$class, $method->getName()];
-                if (! is_callable($callable)) {
+                if (!is_callable($callable)) {
                     continue;
                 }
 
                 $this->hooks[$hook][$priority][] = [$class, $method->getName()];
+                if ($preventFullCache) {
+                    $this->preventedFullCacheHooks = array_unique(array_merge($this->preventedFullCacheHooks, [$hook]));
+                }
             }
         }
     }
@@ -81,7 +93,7 @@ class HookManager
     public function getInterceptorsForHook(Hook|string $hook): array
     {
         $hookClass = is_string($hook) ? $hook : $hook::class;
-        if (! array_key_exists($hookClass, $this->hooks)) {
+        if (!array_key_exists($hookClass, $this->hooks)) {
             return [];
         }
         $hooks = $this->hooks[$hookClass];
@@ -97,16 +109,18 @@ class HookManager
 
     public function reloadCache(): void
     {
-        if (! File::exists($this->getCacheFilepath())) {
-            $this->cached = false;
 
+        if (!File::exists($this->getCacheFilepath())) {
+            $this->cached = false;
             return;
         }
-
         try {
-            $this->hooks = require $this->getCacheFilepath();
+            $cache = require $this->getCacheFilepath();
+            $this->hooks = $cache['hooks'];
+            $this->fullCache = $cache['fullCache'];
             $this->cached = true;
         } catch (\Throwable $e) {
+            report($e);
             $this->clearCache();
             $this->cached = false;
         }
@@ -114,8 +128,14 @@ class HookManager
 
     public function createCache(): void
     {
-        $hooks = array_filter($this->hooks);
-        File::put($this->getCacheFilepath(), "<?php\nreturn ".var_export($hooks, true).';');
+        /** @var class-string<Hook> $hook */
+        foreach ($this->hooks as $hook => $callbacks) {
+            if ($this->isFullyCacheable($hook)) {
+                $this->fullCache[$hook] = $hook::initialInstance()->sendThroughInterceptors();
+            }
+        }
+        $cache = ['hooks' => array_filter($this->hooks), 'fullCache' => $this->fullCache];
+        File::put($this->getCacheFilepath(), "<?php\nreturn " . var_export($cache, true) . ';');
     }
 
     public function clearCache(): void
@@ -129,5 +149,41 @@ class HookManager
     public function isCached(): bool
     {
         return $this->cached;
+    }
+
+    // Full cache management
+
+    /**
+     * @param class-string<Hook> $hook
+     * @return bool
+     */
+    public function isFullyCached(string $hook): bool
+    {
+        return array_key_exists($hook, $this->fullCache);
+    }
+
+    /**
+     * @param class-string<Hook> $hook
+     * @return bool
+     */
+    public function isFullyCacheable(string $hook): bool
+    {
+        return is_subclass_of($hook, FullyCacheable::class)
+            && !$this->isPreventedFromFullCache($hook);
+    }
+
+
+    /**
+     * @param class-string<Hook> $hook
+     * @return Hook|null
+     */
+    public function getCachedHook(string $hook): ?Hook
+    {
+        return $this->fullCache[$hook] ?? null;
+    }
+
+    private function isPreventedFromFullCache(string $hook): bool
+    {
+        return in_array($hook, $this->preventedFullCacheHooks, true);
     }
 }

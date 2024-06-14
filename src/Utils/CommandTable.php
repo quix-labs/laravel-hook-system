@@ -8,14 +8,8 @@ use Termwind\HtmlRenderer;
 
 class CommandTable
 {
-    /**
-     * @param  class-string<Hook>|null  $hook
-     */
-    public static function asString(array &$rows, ?string $hook = null): string
+    public static function asString(array &$rows): string
     {
-        if ($hook) {
-            $hook::send($rows);
-        }
         $html = Blade::render(
             string: file_get_contents(__DIR__.'/design/command_table.blade.php'),
             data: compact('rows'),

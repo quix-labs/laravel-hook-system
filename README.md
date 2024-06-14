@@ -38,6 +38,25 @@ class GetString extends \QuixLabs\LaravelHookSystem\Hook
 }
 ```
 
+### Creating a Fully Cacheable Hook
+
+Fully Cacheable hook execute callback when cache are generated and prevent there executions are runtime:
+
+```php
+class GetString extends \QuixLabs\LaravelHookSystem\Hook implements \QuixLabs\LaravelHookSystem\Interfaces\FullyCacheable
+{
+    public function __construct(public string &$string)
+    {
+    }
+    
+    public static function initialInstance(): static
+    {
+        $string = 'initial-state';
+        return new static($string);
+    }
+}
+```
+
 ### Registering Hooks
 
 In the `register` method of your ServiceProvider:
@@ -131,9 +150,6 @@ The package adds three Artisan commands to manage the hooks:
 The following features are planned for future implementation:
 
 - Instantiate interceptor class using `app()` (add support for dependency container injection).
-- Fully cacheable hooks (pre-executed during the cache process):
-    - Allow hooks to be executed during the cache process (with a default value).
-    - Allow interceptors to prevent cache execution (for example, if they depend on the context request).
 
 ## Changelog
 

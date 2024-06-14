@@ -10,6 +10,8 @@ use QuixLabs\LaravelHookSystem\Facades\HookManager as HookManagerFacade;
 use QuixLabs\LaravelHookSystem\HookManager;
 use QuixLabs\LaravelHookSystem\HookRegistry;
 use QuixLabs\LaravelHookSystem\Hooks\GetHooksTable;
+use Workbench\App\Hooks\GetStringFullyCacheable;
+use Workbench\App\Interceptors\AppendRandomStringFullyCacheable;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
