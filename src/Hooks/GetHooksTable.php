@@ -15,25 +15,26 @@ class GetHooksTable extends Hook implements FullyCacheable
     public static function initialInstance(): static
     {
         $hooks = collect(HookManager::getHooks())
-            ->mapWithKeys(fn(string|Hook $hook) => [$hook => HookManager::getInterceptorsForHook($hook)])->toArray();
+            ->mapWithKeys(fn (string|Hook $hook) => [$hook => HookManager::getInterceptorsForHook($hook)])->toArray();
         $rows = collect($hooks)->map(function (array $interceptors, string $hookClass) {
             $callables = collect($interceptors)
-                ->map(fn(array $callables, int $priority) => implode('<br/>', array_map(
-                        fn(callable $callable) => static::_callableToString($callable), $callables)
+                ->map(fn (array $callables, int $priority) => implode('<br/>', array_map(
+                    fn (callable $callable) => static::_callableToString($callable), $callables)
                 ))->join('<br/>');
 
             $priorities = collect($interceptors)
-                ->map(fn(array $callables, int $priority) => implode('<br/>', array_fill(0, count($callables), $priority)))
+                ->map(fn (array $callables, int $priority) => implode('<br/>', array_fill(0, count($callables), $priority)))
                 ->join('<br/>');
 
             return [
-                'Hook'            => $hookClass,
-                'Interceptors'    => $callables,
-                'Priority'        => $priorities,
-                'Fully Cacheable' => HookManager::isFullyCacheable($hookClass) ? "YES" : "NO",
-                'Fully Cached'    => HookManager::isFullyCached($hookClass) ? "YES" : "NO",
+                'Hook' => $hookClass,
+                'Interceptors' => $callables,
+                'Priority' => $priorities,
+                'Fully Cacheable' => HookManager::isFullyCacheable($hookClass) ? 'YES' : 'NO',
+                'Fully Cached' => HookManager::isFullyCached($hookClass) ? 'YES' : 'NO',
             ];
         })->toArray();
+
         return new static($rows);
     }
 

@@ -4,7 +4,6 @@ namespace QuixLabs\LaravelHookSystem\Console\Commands;
 
 use Illuminate\Console\Command;
 use QuixLabs\LaravelHookSystem\Facades\HookManager;
-use QuixLabs\LaravelHookSystem\Hook;
 use QuixLabs\LaravelHookSystem\Hooks\GetHooksTable;
 use QuixLabs\LaravelHookSystem\Utils\CommandTable;
 

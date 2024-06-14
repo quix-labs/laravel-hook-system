@@ -21,7 +21,6 @@ use QuixLabs\LaravelHookSystem\Hook;
  */
 class HookManager extends Facade
 {
-
     protected static function getFacadeAccessor(): string
     {
         return 'hooks_manager';

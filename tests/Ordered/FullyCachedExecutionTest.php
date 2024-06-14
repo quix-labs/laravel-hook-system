@@ -15,16 +15,15 @@ test('Can execute when cache are not generated', function () {
     expect($string)->toHaveLength(32);
 });
 
-
 test('Cached hook reuse cache each time', function () {
     HookRegistry::registerHook(GetStringFullyCacheable::class);
     HookRegistry::registerInterceptor(AppendRandomStringFullyCacheable::class);
     HookManager::createCache();
     HookManager::reloadCache();
 
-    $string1 = "";
+    $string1 = '';
     GetStringFullyCacheable::send($string1);
-    $string2 = "";
+    $string2 = '';
     GetStringFullyCacheable::send($string2);
     expect($string1)->not->toBeEmpty()
         ->and($string1)->toBe($string2);
@@ -36,7 +35,7 @@ test('Fully cache restored on boot', function () {
     HookManager::createCache();
     HookManager::reloadCache();
 
-    $this->app->forgetInstance("hooks_manager");
+    $this->app->forgetInstance('hooks_manager');
     HookManager::clearResolvedInstances();
     expect(HookManager::isCached())->toBeTrue()
         ->and(HookManager::getCachedHook(GetStringFullyCacheable::class))->not->toBeEmpty();
@@ -47,13 +46,13 @@ test("Cache doesn't destroy initial State", function () {
     HookManager::createCache();
     HookManager::reloadCache();
 
-    $this->app->forgetInstance("hooks_manager");
+    $this->app->forgetInstance('hooks_manager');
     HookManager::clearResolvedInstances();
     expect(HookManager::isCached())->toBeTrue()
         ->and(HookManager::getCachedHook(GetStringFullyCacheable::class))->not->toBeEmpty();
 });
 
-test("Interceptor can prevent full cache", function () {
+test('Interceptor can prevent full cache', function () {
     HookRegistry::registerHook(GetStringFullyCacheable::class);
     HookRegistry::registerInterceptor(AppendRandomStringFullyCacheablePrevent::class);
     HookManager::createCache();

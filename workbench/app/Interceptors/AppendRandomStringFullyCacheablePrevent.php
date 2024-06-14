@@ -5,7 +5,6 @@ namespace Workbench\App\Interceptors;
 use Illuminate\Support\Str;
 use QuixLabs\LaravelHookSystem\Enums\ActionWhenMissing;
 use QuixLabs\LaravelHookSystem\Utils\Intercept;
-use Workbench\App\Hooks\GetString;
 use Workbench\App\Hooks\GetStringFullyCacheable;
 
 class AppendRandomStringFullyCacheablePrevent

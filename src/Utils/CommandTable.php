@@ -3,7 +3,6 @@
 namespace QuixLabs\LaravelHookSystem\Utils;
 
 use Illuminate\Support\Facades\Blade;
-use QuixLabs\LaravelHookSystem\Hook;
 use Termwind\HtmlRenderer;
 
 class CommandTable
