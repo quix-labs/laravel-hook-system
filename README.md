@@ -1,4 +1,5 @@
 # Laravel Hook System
+
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/quix-labs/laravel-hook-system.svg?style=flat-square)](https://packagist.org/packages/quix-labs/laravel-hook-system)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/quix-labs/laravel-hook-system/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/quix-labs/laravel-hook-system/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/quix-labs/laravel-hook-system/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/quix-labs/laravel-hook-system/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
@@ -10,6 +11,7 @@ This system allows intercepting and manipulating specific actions in your applic
 ___
 
 ## Requirements
+
 * PHP >= 8.1
 * Laravel 10.x|11.x
 
@@ -127,6 +129,14 @@ The package adds three Artisan commands to manage the hooks:
 * `hooks:cache` : Caches the hooks and interceptors.
 * `hooks:clear` : Clears the hooks and interceptors cache.
 
+## Planned Features
+
+The following features are planned for future implementation:
+
+- Instantiate interceptor class using `app()` (add support for dependency container injection).
+- Fully cacheable hooks (pre-executed during the cache process):
+    - Allow hooks to be executed during the cache process (with a default value).
+    - Allow interceptors to prevent cache execution (for example, if they depend on the context request).
 
 ## Changelog
 
