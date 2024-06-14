@@ -1,48 +1,47 @@
 <?php
 
 use QuixLabs\LaravelHookSystem\Facades\HookManager;
+use QuixLabs\LaravelHookSystem\HookRegistry;
 use Workbench\App\Hooks\GetString;
 use Workbench\App\Interceptors\AppendRandomString;
 
-afterEach(function () {
-    HookManager::clearCache();
-    $this->app->forgetInstance('hooks_manager');
-    HookManager::clearResolvedInstances();
-});
-
 test('Can generate cache using facade', function () {
     HookManager::createCache();
+    HookManager::reloadCache();
     expect(HookManager::isCached())->toBeTrue();
 });
 
 test('Can clear cache using facade', function () {
     HookManager::createCache();
+    HookManager::reloadCache();
     expect(HookManager::isCached())->toBeTrue();
     HookManager::clearCache();
+    HookManager::reloadCache();
+
     expect(HookManager::isCached())->toBeFalse();
 });
 
 test('Remove hook when has no interceptors', function () {
-    HookManager::registerHook(GetString::class);
+    HookRegistry::registerHook(GetString::class);
     HookManager::createCache();
-    HookManager::loadCache();
+    HookManager::reloadCache();
     expect(HookManager::getHooks())->not->toContain(GetString::class);
 });
 
 test('Can cache single interceptor', function () {
-    HookManager::registerHook(GetString::class);
-    HookManager::registerInterceptor(AppendRandomString::class);
+    HookRegistry::registerHook(GetString::class);
+    HookRegistry::registerInterceptor(AppendRandomString::class);
     HookManager::createCache();
-    HookManager::loadCache();
+    HookManager::reloadCache();
     expect(HookManager::getInterceptorsForHook(GetString::class))->toHaveCount(1);
 });
 
 test('Can cache same interceptor twice', function () {
-    HookManager::registerHook(GetString::class);
-    HookManager::registerInterceptor(AppendRandomString::class);
-    HookManager::registerInterceptor(AppendRandomString::class);
+    HookRegistry::registerHook(GetString::class);
+    HookRegistry::registerInterceptor(AppendRandomString::class);
+    HookRegistry::registerInterceptor(AppendRandomString::class);
     HookManager::createCache();
-    HookManager::loadCache();
+    HookManager::reloadCache();
     expect(collect(HookManager::getInterceptorsForHook(GetString::class))->flatten(1))->toHaveCount(2);
 });
 
@@ -53,7 +52,8 @@ test('Cache are restored on boot if exists', function () {
     expect(HookManager::isCached())->toBeTrue();
 });
 
-test('Throw error when cache file cannot be loaded', function () {
+test('Corrupted cache file will be removed', function () {
     file_put_contents(HookManager::getCacheFilepath(), '<?php return teer;');
-    HookManager::loadCache();
-})->throws('Unable to load hooks cache');
+    HookManager::reloadCache();
+    expect(HookManager::isCached())->toBeFalse();
+});

@@ -4,19 +4,20 @@ namespace QuixLabs\LaravelHookSystem\Tests;
 
 use Orchestra\Testbench\TestCase as Orchestra;
 use QuixLabs\LaravelHookSystem\Providers\ServiceProvider;
-use Workbench\App\Providers\WorkbenchServiceProvider;
 
-class TestCase extends Orchestra
+class TestCaseOrdered extends Orchestra
 {
     protected function setUp(): void
     {
+        if (file_exists(static::applicationBasePath().'/bootstrap/cache/hooks.php')) {
+            unlink(static::applicationBasePath().'/bootstrap/cache/hooks.php');
+        }
         parent::setUp();
     }
 
     protected function getPackageProviders($app): array
     {
         return [
-            WorkbenchServiceProvider::class,
             ServiceProvider::class,
         ];
     }

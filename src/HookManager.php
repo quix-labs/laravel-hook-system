@@ -13,11 +13,17 @@ class HookManager
      */
     protected array $hooks = [];
 
+    /**
+     * @var true
+     */
+    private bool $cached = false;
+
+    /**
+     * @throws \Exception
+     */
     public function __construct()
     {
-        if ($this->isCached()) {
-            $this->loadCache();
-        }
+        $this->reloadCache();
     }
 
     public function registerHook(Hook|string $hook): void
@@ -92,12 +98,20 @@ class HookManager
         return base_path('bootstrap/cache/hooks.php');
     }
 
-    public function loadCache(): void
+    public function reloadCache(): void
     {
+        if (! File::exists($this->getCacheFilepath())) {
+            $this->cached = false;
+
+            return;
+        }
+
         try {
             $this->hooks = require $this->getCacheFilepath();
+            $this->cached = true;
         } catch (\Throwable $e) {
-            throw new \RuntimeException('Unable to load hooks cache: '.$e->getMessage());
+            $this->clearCache();
+            $this->cached = false;
         }
     }
 
@@ -112,10 +126,11 @@ class HookManager
         if (File::exists($this->getCacheFilepath())) {
             File::delete($this->getCacheFilepath());
         }
+        $this->cached = false;
     }
 
     public function isCached(): bool
     {
-        return File::exists($this->getCacheFilepath());
+        return $this->cached;
     }
 }

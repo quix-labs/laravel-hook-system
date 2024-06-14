@@ -43,13 +43,12 @@ class GetString extends \QuixLabs\LaravelHookSystem\Hook
 In the `register` method of your ServiceProvider:
 
 ```php
-use QuixLabs\LaravelHookSystem\Facades\HookManager;
 use Workbench\App\Hooks\GetString;
 
 class YourProvider{
     public function register()
     {
-        HookManager::registerHook(GetString::class);
+        \QuixLabs\LaravelHookSystem\HookRegistry::registerHook(GetString::class);
     }
 }
 
@@ -65,7 +64,7 @@ class YourController
     public function index()
     {
         $string = "";
-         \Workbench\App\Hooks\GetString::send($string);
+        \Workbench\App\Hooks\GetString::send($string);
         return $string;
     }
 }
@@ -111,12 +110,10 @@ class AppendRandomString
 In the `boot` method of your ServiceProvider:
 
 ```php
-use QuixLabs\LaravelHookSystem\Facades\HookManager;
-
 class YourProvider{
     public function boot()
     {
-        HookManager::registerInterceptor(\App\Interceptors\AppendRandomString::class);
+        \QuixLabs\LaravelHookSystem\HookRegistry::registerInterceptor(\App\Interceptors\AppendRandomString::class);
     }
 }
 ```
