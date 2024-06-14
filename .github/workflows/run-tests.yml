@@ -63,7 +63,7 @@ jobs:
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
-          name: test-results-${{ matrix.os }}-${{ matrix.php }}-${{ matrix.laravel }}
+          name: test-results-${{ matrix.os }}-${{ matrix.php }}-${{ matrix.laravel }}.junit.xml
           path: build/report.junit.xml
           retention-days: 1
 
