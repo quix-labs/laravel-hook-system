@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-hook-system` will be documented in this file.
 
+## 1.1.0 - 2024-06-14
+
+* Implements fully cacheable hook
+
+**Full Changelog**: https://github.com/quix-labs/laravel-hook-system/compare/1.0.0...1.1.0
+
 ## 1.0.0 - 2024-06-14
 
 ### What's Changed
