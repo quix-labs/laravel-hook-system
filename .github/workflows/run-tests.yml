@@ -79,3 +79,4 @@ jobs:
         if: always()
         with:
           report_paths: 'build/**.junit.xml'
+          include_passed: true
