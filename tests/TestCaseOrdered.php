@@ -9,8 +9,8 @@ class TestCaseOrdered extends Orchestra
 {
     protected function setUp(): void
     {
-        if (file_exists(static::applicationBasePath() . '/bootstrap/cache/hooks.php')) {
-            unlink(static::applicationBasePath() . '/bootstrap/cache/hooks.php');
+        if (file_exists(static::applicationBasePath().'/bootstrap/cache/hooks.php')) {
+            unlink(static::applicationBasePath().'/bootstrap/cache/hooks.php');
         }
         parent::setUp();
     }

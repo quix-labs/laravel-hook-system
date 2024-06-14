@@ -2,7 +2,6 @@
 
 namespace QuixLabs\LaravelHookSystem\Providers;
 
-use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Console\AboutCommand;
 use QuixLabs\LaravelHookSystem\Console\Commands\HooksCacheCommand;
 use QuixLabs\LaravelHookSystem\Console\Commands\HooksClearCommand;
@@ -47,10 +46,10 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
     private function _appendInformationToAboutCommand(): void
     {
-        if (!$this->app->runningInConsole()) {
+        if (! $this->app->runningInConsole()) {
             return;
         }
-        AboutCommand::add('Cache', fn() => [
+        AboutCommand::add('Cache', fn () => [
             'Hooks' => HookManagerFacade::isCached()
                 ? '<fg=green;options=bold>CACHED</>'
                 : '<fg=yellow;options=bold>NOT CACHED</>',
@@ -59,7 +58,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
     private function _bootHooksRegistry(): void
     {
-        if (!HookManagerFacade::isCached()) {
+        if (! HookManagerFacade::isCached()) {
             foreach (HookRegistry::getHooks() as $hook) {
                 HookManagerFacade::registerHook($hook);
             }

@@ -7,12 +7,14 @@ use QuixLabs\LaravelHookSystem\Facades\HookManager;
 class HookRegistry
 {
     protected static array $hooks = [];
+
     protected static array $interceptors = [];
 
     public static function registerHook($hook): void
     {
-        if (static::booted() === true && !HookManager::isCached()) {
+        if (static::booted() === true && ! HookManager::isCached()) {
             Hookmanager::registerHook($hook);
+
             return;
         }
         static::$hooks[] = $hook;
@@ -20,8 +22,9 @@ class HookRegistry
 
     public static function registerInterceptor($interceptor): void
     {
-        if (static::booted() === true && !HookManager::isCached()) {
+        if (static::booted() === true && ! HookManager::isCached()) {
             Hookmanager::registerInterceptor($interceptor);
+
             return;
         }
         static::$interceptors[] = $interceptor;

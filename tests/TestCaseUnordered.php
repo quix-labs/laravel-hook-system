@@ -2,7 +2,6 @@
 
 namespace QuixLabs\LaravelHookSystem\Tests;
 
-use Orchestra\Testbench\TestCase as Orchestra;
 use QuixLabs\LaravelHookSystem\Providers\ServiceProvider;
 use Workbench\App\Providers\ExternalRegisteringProvider;
 
@@ -15,5 +14,4 @@ class TestCaseUnordered extends TestCaseOrdered
             ServiceProvider::class,
         ];
     }
-
 }
