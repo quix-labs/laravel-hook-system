@@ -14,9 +14,7 @@ class HooksCacheCommand extends Command
     public function handle(): int
     {
         HookManager::createCache();
-        if (HookManager::isCached()) {
-            $this->components->info('Hooks cached successfully.');
-        }
+        $this->components->info('Hooks cached successfully.');
 
         return self::SUCCESS;
     }
