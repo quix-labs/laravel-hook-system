@@ -13,11 +13,17 @@ class HookManager
      */
     protected array $hooks = [];
 
+    /**
+     * @var true
+     */
+    private bool $cached = false;
+
+    /**
+     * @throws \Exception
+     */
     public function __construct()
     {
-        if ($this->isCached()) {
-            $this->loadCache();
-        }
+        $this->reloadCache();
     }
 
     public function registerHook(Hook|string $hook): void
@@ -41,7 +47,7 @@ class HookManager
                 $hook = $attributeInstance->hook;
                 $priority = $attributeInstance->priority;
 
-                if (! array_key_exists($attributeInstance->hook, $this->hooks)) {
+                if (!array_key_exists($attributeInstance->hook, $this->hooks)) {
                     switch ($attributeInstance->actionWhenMissing) {
                         case ActionWhenMissing::THROW_ERROR:
                             throw new \Exception("Hook {$hook} is not registered!");
@@ -53,7 +59,7 @@ class HookManager
                 }
 
                 $callable = [$class, $method->getName()];
-                if (! is_callable($callable)) {
+                if (!is_callable($callable)) {
                     continue;
                 }
 
@@ -78,7 +84,7 @@ class HookManager
     public function getInterceptorsForHook(Hook|string $hook): array
     {
         $hookClass = is_string($hook) ? $hook : $hook::class;
-        if (! array_key_exists($hookClass, $this->hooks)) {
+        if (!array_key_exists($hookClass, $this->hooks)) {
             return [];
         }
         $hooks = $this->hooks[$hookClass];
@@ -92,19 +98,26 @@ class HookManager
         return base_path('bootstrap/cache/hooks.php');
     }
 
-    public function loadCache(): void
+    public function reloadCache(): void
     {
+        if (!File::exists($this->getCacheFilepath())) {
+            $this->cached = false;
+            return;
+        }
+
         try {
             $this->hooks = require $this->getCacheFilepath();
+            $this->cached = true;
         } catch (\Throwable $e) {
-            throw new \RuntimeException('Unable to load hooks cache: '.$e->getMessage());
+            $this->clearCache();
+            $this->cached = false;
         }
     }
 
     public function createCache(): void
     {
         $hooks = array_filter($this->hooks);
-        File::put($this->getCacheFilepath(), "<?php\nreturn ".var_export($hooks, true).';');
+        File::put($this->getCacheFilepath(), "<?php\nreturn " . var_export($hooks, true) . ';');
     }
 
     public function clearCache(): void
@@ -112,10 +125,11 @@ class HookManager
         if (File::exists($this->getCacheFilepath())) {
             File::delete($this->getCacheFilepath());
         }
+        $this->cached = false;
     }
 
     public function isCached(): bool
     {
-        return File::exists($this->getCacheFilepath());
+        return $this->cached;
     }
 }
