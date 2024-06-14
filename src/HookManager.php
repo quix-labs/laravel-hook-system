@@ -132,6 +132,7 @@ class HookManager
         /** @var class-string<Hook> $hook */
         foreach ($this->hooks as $hook => $callbacks) {
             if ($this->isFullyCacheable($hook)) {
+                /** @phpstan-ignore-next-line */
                 $this->fullCache[$hook] = $hook::initialInstance()->sendThroughInterceptors();
             }
         }

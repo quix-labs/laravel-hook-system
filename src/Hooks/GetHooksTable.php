@@ -35,10 +35,11 @@ class GetHooksTable extends Hook implements FullyCacheable
             ];
         })->toArray();
 
+        /** @phpstan-ignore-next-line */
         return new static($rows);
     }
 
-    private static function _callableToString(callable $callable): string
+    public static function _callableToString(callable $callable): string
     {
         if (is_array($callable)) {
             $class = is_object($callable[0]) ? get_class($callable[0]) : $callable[0];

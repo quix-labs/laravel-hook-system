@@ -28,6 +28,7 @@ abstract class Hook
         }
 
         if (! HookManager::isFullyCached(static::class)) {
+            /** @phpstan-ignore-next-line */
             $instance = static::initialInstance()->sendThroughInterceptors();
         } else {
             $instance = HookManager::getCachedHook(static::class);
@@ -57,6 +58,7 @@ abstract class Hook
     // Keep for fully cache
     public static function __set_state(array $state): static
     {
+        /** @phpstan-ignore-next-line */
         return new static(...$state);
     }
 }
