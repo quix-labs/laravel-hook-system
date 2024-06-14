@@ -40,7 +40,8 @@ class GetString extends \QuixLabs\LaravelHookSystem\Hook
 
 ### Creating a Fully Cacheable Hook
 
-Fully Cacheable hook execute callback when cache are generated and prevent there executions are runtime:
+Fully cacheable hooks execute interceptors during cache generation and prevent their execution at runtime.
+An interceptor can bypass this behavior.
 
 ```php
 class GetString extends \QuixLabs\LaravelHookSystem\Hook implements \QuixLabs\LaravelHookSystem\Interfaces\FullyCacheable
@@ -117,6 +118,12 @@ class AppendRandomString
     
     # You can also specify execution priority using third argument
     #[Intercept(\Workbench\App\Hooks\GetString::class, ActionWhenMissing::SKIP, 100)]
+    public static function appendRandomStringAtTheEnd(GetString $hook): void
+    {
+        $hook->string .= Str::random(16);
+    }
+    # You can prevent full cache generation (useful if the interceptor depends on context request)
+    #[Intercept(\Workbench\App\Hooks\GetString::class, ActionWhenMissing::SKIP, 100, false)]
     public static function appendRandomStringAtTheEnd(GetString $hook): void
     {
         $hook->string .= Str::random(16);
