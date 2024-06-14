@@ -9,12 +9,6 @@ on:
       - 'composer.json'
       - 'composer.lock'
 
-permissions:
-  contents: read
-  issues: read
-  checks: write
-  pull-requests: write
-
 jobs:
   test:
     runs-on: ${{ matrix.os }}
@@ -65,6 +59,20 @@ jobs:
 
       - name: Execute tests
         run: vendor/bin/pest --ci --coverage --log-junit build/report.junit.xml
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results-${{ matrix.os }}-${{ matrix.php }}-${{ matrix.laravel }}
+          path: build/report.junit.xml
+          retention-days: 1
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report-${{ matrix.os }}-${{ matrix.php }}-${{ matrix.laravel }}
+          path: build/coverage
+          retention-days: 1
 
       - name: Publish Test Results
         uses: mikepenz/action-junit-report@v4
