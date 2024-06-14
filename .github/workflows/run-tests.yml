@@ -61,14 +61,14 @@ jobs:
         run: vendor/bin/pest --ci --coverage --log-junit build/report.junit.xml
 
       - name: Upload test results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-results-${{ matrix.os }}-${{ matrix.php }}-${{ matrix.laravel }}
           path: build/report.junit.xml
           retention-days: 1
 
       - name: Upload coverage report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-report-${{ matrix.os }}-${{ matrix.php }}-${{ matrix.laravel }}
           path: build/coverage
