@@ -15,7 +15,6 @@ permissions:
   checks: write
   pull-requests: write
 
-
 jobs:
   test:
     runs-on: ${{ matrix.os }}
@@ -68,8 +67,7 @@ jobs:
         run: vendor/bin/pest --ci --coverage --log-junit build/report.junit.xml
 
       - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2
+        uses: mikepenz/action-junit-report@v4
         if: always()
         with:
-          files: |
-            build/**.junit.xml
+          report_paths: 'build/**.junit.xml'
