@@ -13,9 +13,6 @@ class HookManager
      */
     protected array $hooks = [];
 
-    /**
-     * @var true
-     */
     private bool $cached = false;
 
     /**
