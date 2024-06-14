@@ -80,5 +80,4 @@ jobs:
         with:
           report_paths: 'build/**.junit.xml'
           include_passed: true
-          detailed_summary: true
           follow_symlink: true
