@@ -8,8 +8,5 @@ use QuixLabs\LaravelHookSystem\Utils\Intercept;
 class RegisterNonExistingHook
 {
     #[Intercept(InvalidHook::class, ActionWhenMissing::REGISTER_HOOK, 0)]
-    public static function handleNonExistingHook(InvalidHook $hook)
-    {
-
-    }
+    public static function handleNonExistingHook(InvalidHook $hook) {}
 }
