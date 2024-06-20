@@ -16,6 +16,5 @@ class Intercept
         public ActionWhenMissing $actionWhenMissing = ActionWhenMissing::THROW_ERROR,
         public int $priority = 0,
         public bool $preventFullCache = false
-    ) {
-    }
+    ) {}
 }

@@ -6,7 +6,5 @@ use QuixLabs\LaravelHookSystem\Hook;
 
 class GetArray extends Hook
 {
-    public function __construct(public array &$array)
-    {
-    }
+    public function __construct(public array &$array) {}
 }

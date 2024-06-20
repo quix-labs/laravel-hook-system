@@ -6,7 +6,5 @@ use QuixLabs\LaravelHookSystem\Hook;
 
 class GetString extends Hook
 {
-    public function __construct(public string &$string)
-    {
-    }
+    public function __construct(public string &$string) {}
 }
