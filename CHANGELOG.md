@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-hook-system` will be documented in this file.
 
+## 1.1.2 - 2024-06-20
+
+### What's Changed
+
+* Fix error when display bad full cache status in hooks:status command
+
+**Full Changelog**: https://github.com/quix-labs/laravel-hook-system/compare/1.1.0...1.1.2
+
 ## 1.1.0 - 2024-06-14
 
 * Implements fully cacheable hook
