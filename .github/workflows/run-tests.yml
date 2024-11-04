@@ -69,7 +69,7 @@ jobs:
           retention-days: 1
 
 #      - name: Publish Test Results
-#        uses: mikepenz/action-junit-report@v4
+#        uses: mikepenz/action-junit-report@v5
 #        if: always()
 #        with:
 #          report_paths: 'build/**.junit.xml'
@@ -89,7 +89,7 @@ jobs:
           path: downloaded_artifacts
 
       - name: Publish Test Results
-        uses: mikepenz/action-junit-report@v4
+        uses: mikepenz/action-junit-report@v5
         with:
           report_paths: 'downloaded_artifacts/**/*.junit.xml'
           include_passed: true
