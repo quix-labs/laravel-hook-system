@@ -31,6 +31,10 @@ jobs:
             laravel: 11
           - php: 8.1
             laravel: 12
+          # Excluded because testbench is corrupted for versions below
+          - php: 8.3
+            laravel: 10
+            stability: prefer-lowest
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
