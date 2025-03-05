@@ -9,7 +9,7 @@ use QuixLabs\LaravelHookSystem\Hooks\GetHooksTable;
 use QuixLabs\LaravelHookSystem\Utils\CommandTable;
 use Symfony\Component\Console\Attribute\AsCommand;
 
-#[AsCommand("hooks:status")]
+#[AsCommand('hooks:status')]
 class HooksStatusCommand extends Command
 {
     protected $signature = 'hooks:status';
@@ -23,23 +23,23 @@ class HooksStatusCommand extends Command
         }
 
         $hooks = collect(HookManager::getHooks())
-            ->mapWithKeys(fn(string|Hook $hook) => [$hook => HookManager::getInterceptorsForHook($hook)])->toArray();
+            ->mapWithKeys(fn (string|Hook $hook) => [$hook => HookManager::getInterceptorsForHook($hook)])->toArray();
         $rows = collect($hooks)->map(function (array $interceptors, string $hookClass) {
             $callables = collect($interceptors)
-                ->map(fn(array $callables, int $priority) => implode('<br/>', array_map(
-                        fn(callable $callable) => static::_callableToString($callable), $callables)
+                ->map(fn (array $callables, int $priority) => implode('<br/>', array_map(
+                    fn (callable $callable) => static::_callableToString($callable), $callables)
                 ))->join('<br/>');
 
             $priorities = collect($interceptors)
-                ->map(fn(array $callables, int $priority) => implode('<br/>', array_fill(0, count($callables), $priority)))
+                ->map(fn (array $callables, int $priority) => implode('<br/>', array_fill(0, count($callables), $priority)))
                 ->join('<br/>');
 
             return [
-                'Hook'            => $hookClass,
-                'Interceptors'    => $callables,
-                'Priority'        => $priorities,
+                'Hook' => $hookClass,
+                'Interceptors' => $callables,
+                'Priority' => $priorities,
                 'Fully Cacheable' => HookManager::isFullyCacheable($hookClass) ? 'YES' : 'NO',
-                'Fully Cached'    => HookManager::isFullyCached($hookClass) ? 'YES' : 'NO',
+                'Fully Cached' => HookManager::isFullyCached($hookClass) ? 'YES' : 'NO',
             ];
         })->toArray();
 
