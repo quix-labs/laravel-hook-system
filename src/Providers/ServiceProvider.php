@@ -77,6 +77,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             return;
         }
 
+        // @phpstan-ignore-next-line
         if (!method_exists($this, 'optimizes')) {
             return;
         }
