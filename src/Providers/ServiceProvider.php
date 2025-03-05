@@ -16,7 +16,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     public function register(): void
     {
         $this->app->singleton('hooks_manager', function () {
-            return new HookManager();
+            return new HookManager;
         });
         $this->_registerCommands();
         $this->_registerHooks();
@@ -26,6 +26,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         $this->_bootHooksRegistry();
         $this->_appendInformationToAboutCommand();
+        $this->_registerOptimizes();
     }
 
     private function _registerHooks(): void
@@ -49,6 +50,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         if (! $this->app->runningInConsole()) {
             return;
         }
+
         AboutCommand::add('Cache', fn () => [
             'Hooks' => HookManagerFacade::isCached()
                 ? '<fg=green;options=bold>CACHED</>'
@@ -67,5 +69,23 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             }
         }
         HookRegistry::clear();
+    }
+
+    private function _registerOptimizes(): void
+    {
+        if (! $this->app->runningInConsole()) {
+            return;
+        }
+
+        // @phpstan-ignore-next-line
+        if (! method_exists($this, 'optimizes')) {
+            return;
+        }
+
+        $this->optimizes(
+            optimize: HooksCacheCommand::getDefaultName(),
+            clear: HooksClearCommand::getDefaultName(),
+            key: 'hooks'
+        );
     }
 }

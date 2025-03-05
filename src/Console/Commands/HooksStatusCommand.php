@@ -7,7 +7,9 @@ use QuixLabs\LaravelHookSystem\Facades\HookManager;
 use QuixLabs\LaravelHookSystem\Hook;
 use QuixLabs\LaravelHookSystem\Hooks\GetHooksTable;
 use QuixLabs\LaravelHookSystem\Utils\CommandTable;
+use Symfony\Component\Console\Attribute\AsCommand;
 
+#[AsCommand('hooks:status')]
 class HooksStatusCommand extends Command
 {
     protected $signature = 'hooks:status';

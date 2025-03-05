@@ -8,7 +8,6 @@ on:
       - 'phpunit.xml.dist'
       - 'composer.json'
       - 'composer.lock'
-
 jobs:
   test:
     runs-on: ${{ matrix.os }}
@@ -16,20 +15,25 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [ ubuntu-latest ] # [...,  windows-latest ]
-        php: [8.3, 8.2, 8.1]
-        laravel: [ 10, 11 ]
-        stability: [ prefer-stable ]
+        os: [ ubuntu-latest, windows-latest ]
+        php: [ 8.1, 8.2, 8.3, 8.4 ]
+        laravel: [ 10, 11, 12 ]
+        stability: [ prefer-lowest, prefer-stable ]
         include:
-          - laravel: 10
-            testbench: 8.*
-            carbon: "^2.72.2|^3.0"
+          - laravel: 12
+            testbench: 10.*
           - laravel: 11
             testbench: 9.*
-            carbon: "^2.72.2|^3.0"
+          - laravel: 10
+            testbench: 8.*
         exclude:
           - php: 8.1
             laravel: 11
+          - php: 8.1
+            laravel: 12
+          # Excluded because testbench is corrupted for versions below
+          - laravel: 10
+            stability: prefer-lowest
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
@@ -51,7 +55,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer require "laravel/framework:${{ matrix.laravel }}.*" "orchestra/testbench:${{ matrix.testbench }}" "nesbot/carbon:${{ matrix.carbon }}" --no-interaction --no-update
+          composer require "laravel/framework:${{ matrix.laravel }}.*" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
       - name: List Installed Dependencies
@@ -63,18 +67,18 @@ jobs:
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
-          name: test-results-${{ matrix.os }}-${{ matrix.php }}-${{ matrix.laravel }}
+          name: test-results-${{ matrix.os }}-${{ matrix.php }}-${{ matrix.laravel }}-${{ matrix.stability }}
           path: build/report.junit.xml
           if-no-files-found: ignore
           retention-days: 1
 
-#      - name: Publish Test Results
-#        uses: mikepenz/action-junit-report@v5
-#        if: always()
-#        with:
-#          report_paths: 'build/**.junit.xml'
-#          include_passed: true
-#          follow_symlink: true
+      - name: Publish Test Results
+        uses: mikepenz/action-junit-report@v5
+        if: always()
+        with:
+          report_paths: 'build/**.junit.xml'
+          include_passed: true
+          follow_symlink: true
 
   process-test-data:
     runs-on: ubuntu-latest
