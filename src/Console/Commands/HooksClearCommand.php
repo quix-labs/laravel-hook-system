@@ -4,7 +4,9 @@ namespace QuixLabs\LaravelHookSystem\Console\Commands;
 
 use Illuminate\Console\Command;
 use QuixLabs\LaravelHookSystem\Facades\HookManager;
+use Symfony\Component\Console\Attribute\AsCommand;
 
+#[AsCommand("hooks:clear")]
 class HooksClearCommand extends Command
 {
     protected $signature = 'hooks:clear';
@@ -14,7 +16,7 @@ class HooksClearCommand extends Command
     public function handle(): int
     {
         HookManager::clearCache();
-        if (! HookManager::isCached()) {
+        if (!HookManager::isCached()) {
             $this->components->info('Compiled hooks cleared successfully.');
         }
 
