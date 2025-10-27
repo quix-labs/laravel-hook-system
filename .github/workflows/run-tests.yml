@@ -65,7 +65,7 @@ jobs:
         run: vendor/bin/pest --ci --coverage --log-junit build/report.junit.xml
 
       - name: Upload test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: test-results-${{ matrix.os }}-${{ matrix.php }}-${{ matrix.laravel }}-${{ matrix.stability }}
           path: build/report.junit.xml
