@@ -83,8 +83,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         }
 
         $this->optimizes(
-            optimize: HooksCacheCommand::getDefaultName(),
-            clear: HooksClearCommand::getDefaultName(),
+            optimize: 'hooks:cache',
+            clear: 'hooks:clear',
             key: 'hooks'
         );
     }
