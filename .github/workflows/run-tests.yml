@@ -50,6 +50,15 @@ jobs:
 
       - name: Install dependencies
         run: |
+          # Composer 2.9 refuses to resolve to any package version affected by a
+          # known security advisory. Once every tagged release of an older-but-
+          # still-supported Laravel major (e.g. 11.x) accumulates at least one
+          # advisory, this leaves only the live `<major>.x-dev` branch as an
+          # installable match, which can be ahead of what pinned dev tooling
+          # (testbench, pest, ...) expects and break tests unrelated to the
+          # package itself. These are test-only dependencies, never shipped to
+          # consumers, so it's safe to let the resolver consider them here.
+          composer config audit.block-insecure false
           composer require "laravel/framework:${{ matrix.laravel }}.*" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
