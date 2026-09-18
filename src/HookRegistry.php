@@ -13,7 +13,7 @@ class HookRegistry
     public static function registerHook($hook): void
     {
         if (static::booted() === true && ! HookManager::isCached()) {
-            Hookmanager::registerHook($hook);
+            HookManager::registerHook($hook);
 
             return;
         }
@@ -23,7 +23,7 @@ class HookRegistry
     public static function registerInterceptor($interceptor): void
     {
         if (static::booted() === true && ! HookManager::isCached()) {
-            Hookmanager::registerInterceptor($interceptor);
+            HookManager::registerInterceptor($interceptor);
 
             return;
         }
